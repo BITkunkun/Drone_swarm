@@ -145,12 +145,16 @@ def animate(i, leader, followers, scatters, lines):
 
 def main():
     """主函数：设置并运行编队控制仿真
-    
+
     创建:
     - 1架领航无人机（红色）
     - 3架跟随无人机组成三角形编队（蓝色、绿色、紫色）
     - 实时动画显示位置和轨迹
     """
+    # 设置中文字体
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置中文显示
+    plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
+    
     # 创建编队配置
     leader = LeaderDrone(0)
     followers = [
