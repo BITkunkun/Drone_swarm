@@ -66,8 +66,8 @@ class FollowerDrone:
         
     def update_target(self):
         """根据领航无人机位置更新目标位置"""
-        leader_pos = self.leader.get_position()
-        self.target_pos = leader_pos + self.offset
+        leader_pos = self.leader.get_position() # 领航无人机实时位置
+        self.target_pos = leader_pos + self.offset # 跟随无人机目标位置
         
     def pid_control(self):
         """使用PID控制（仅比例项）更新无人机状态"""
@@ -112,7 +112,7 @@ def quadcopter_dynamics(state, u, dt):
     
     return DroneState(new_x, new_y, new_vx, new_vy)
 
-def animate(i, leader, followers, scatters, lines):
+def animate(i, leader, followers, scatters, lines, dt):
     """动画更新函数，每帧调用一次
     
     参数:
@@ -122,10 +122,18 @@ def animate(i, leader, followers, scatters, lines):
         scatters (list): matplotlib散点对象（表示无人机当前位置）
         lines (list): matplotlib线对象（表示飞行轨迹）
     """
-    # 领航者路径规划（示例：直线运动）
-    leader_pos = leader.get_position() + np.array([0.1, 0])
+    # 示例：直线运动 领航无人机直线匀速运动
+    leader_pos = leader.get_position() + np.array([0.1, 0]) # 直线匀速向右飞行运动
     leader.update_position(leader_pos)
+
+    # 领航无人机变速运动
+    # u = (3, 1)  # 加速度控制输入 (ax, ay)
     
+    # # 使用动力学模型更新领航者状态
+    # new_state = quadcopter_dynamics(leader.state, u, dt)
+    # leader.state = new_state
+    # leader.update_position((new_state.x, new_state.y))
+
     # 更新所有跟随者状态
     for follower in followers:
         follower.pid_control()
@@ -181,9 +189,11 @@ def main():
     
     ax.legend()  # 显示图例
     
+    dt = 0.05
+
     # 创建动画
     ani = FuncAnimation(fig, animate, frames=200, 
-                       fargs=(leader, followers, scatters, lines),
+                       fargs=(leader, followers, scatters, lines, dt),
                        interval=50, blit=True)
     
     plt.show()
