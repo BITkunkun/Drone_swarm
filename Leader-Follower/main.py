@@ -156,10 +156,10 @@ def main():
     plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
     
     # 创建编队配置
-    leader = LeaderDrone(0)
+    leader = LeaderDrone(0) # Leader无人机向右飞行
     followers = [
-        FollowerDrone(1, leader, offset=np.array([0, 5])),   # 右侧无人机
-        FollowerDrone(2, leader, offset=np.array([5, 0])),   # 前方无人机
+        FollowerDrone(1, leader, offset=np.array([0, 5])),   # 上侧无人机
+        FollowerDrone(2, leader, offset=np.array([5, 0])),   # 右方无人机
         FollowerDrone(3, leader, offset=np.array([-5, 0]))  # 左侧无人机
     ]
     
